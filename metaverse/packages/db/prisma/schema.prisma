@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User{
+  id        String  @id @unique @default(uuid())
+  username  String  @unique
+  password  String  
+  avatarId  String
+  role    Role     
+  spaces     Space[]   //a user can have multiple spaces
+  avatar    Avatar @relation(fields: [avatarId], references: [id]) // relation to Avatar
+}
+model Space{
+id String @id @unique @default(uuid())
+name String
+width Int
+height  Int
+thumbnail String?
+creatorId String
+creator User @relation(fields: [creatorId], references: [id]) // relation to User
+elements SpaceElements[] // a space can have multiple elements
+}
+model SpaceElements{
+id String @id @unique @default(uuid())
+elementId String
+elements Element @relation(fields: [elementId], references: [id]) // relation to Element
+spaceId String
+spaces Space @relation(fields: [spaceId], references: [id]) // relation to Space
+x Int
+y Int
+}
+
+model Element{
+id String @id @unique @default(uuid())
+width Int
+height Int
+imageUrl String
+spaces SpaceElements[] // a element can be part of multiple spaces
+mapElements MapElements[] // a element can be part of multiple maps
+}
+model Map{
+id String @id @unique @default(uuid())
+width Int
+height Int
+name String
+mapElements MapElements[] // a map can have multiple elements
+}
+model MapElements{
+id String @id @unique @default(uuid())
+mapId String
+elementId String
+x Int?
+y Int?
+map Map @relation(fields: [mapId], references: [id]) // relation to Map
+element Element @relation(fields: [elementId], references: [id]) // relation to Element
+
+}
+model Avatar{
+  id String @id @unique @default(uuid())
+  imageUrl String?
+  name String?
+  users User[]
+}
+
+enum Role{
+  USER 
+  ADMIN 
+}
