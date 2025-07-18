@@ -3,9 +3,16 @@ import { adminRouter } from "./admin.js";
 import { userRouter } from "./user.js";
 import { spaceRouter } from "./space.js";
 import { SigninSchema, SignupSchema } from "../../types/index.js";
-import bcrypt from "bcrypt";
+import { z } from "zod";
+import {hash,compare} from "../../scrypt.js";
+// import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import client from "@repo/db/client";
+// import prisma from "@repo/db/client";
+import { PrismaClient } from "@repo/db/client";
+const client = new PrismaClient();
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
+// const prisma = new client();
 import { JWT_SECRET } from "../../config.js";
 export const router = Router();
 
@@ -18,13 +25,13 @@ router.post("/signup", async (req, res) => {
         });
         return;
     }
-    const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
+    const hashedPassword = await hash(parsedData.data.password);
     try {
         const user = await client.user.create({
             data: {
                 username: parsedData.data.username,
-                password: hashedPassword,
-                // avatarId: parsedData.data.avatarId,
+                password: parsedData.data.password,
+                avatarId: parsedData.data.avatarId,
                 role: parsedData.data.role === "admin" ? "ADMIN" : "USER",
             },
         });
@@ -58,10 +65,7 @@ router.post("/signin", async (req, res) => {
             res.status(403).json({ message: "User not found" });
             return;
         }
-        const isPasswordValid = await bcrypt.compare(
-            parsedData.data.password,
-            user.password
-        );
+        const isPasswordValid = await compare(parsedData.data.password, user.password);
         if (!isPasswordValid) {
             res.status(403).json({ message: "Invalid password" });
             return;
