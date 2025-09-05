@@ -6,6 +6,7 @@ const axios = {
             const response = await axios_og.post(...args);
             return response;
         } catch (error) {
+            // console.error("Error in POST request:", error);
             return error.response;
         }
     },
@@ -34,25 +35,27 @@ const axios = {
         }
     },
 };
-
+const username1 = "Lokidad" + Math.floor(Math.random() * 1000);
 const BASE_URL = "http://localhost:3000";
 const WS_URL = "ws://localhost:3001";
 describe("Authenticate ", () => {
     test("User is able to sign up only once", async () => {
-        const username = "Lokidada" + Math.floor(Math.random() * 1000);
+        const username = "Lokidad" + Math.floor(Math.random() * 1000);
         const password = "password123";
         const response = await axios.post(`${BASE_URL}/api/v1/signup`, {
-            username,
+            username1,
             password,
-            type: "ADMIN",
+            role: "admin",
         });
-        expect(response.statusCode).toBe(200);
+        console.log(response.data);
+        expect(response.status).toBe(200);
         const response2 = await axios.post(`${BASE_URL}/api/v1/signup`, {
-            username,
+            username1,
             password,
-            type: "admin",
+            role: "admin",
         });
-        expect(response2.statusCode).toBe(400);
+
+        expect(response2.status).toBe(400);
     });
     test("Username empty, signup fails", async () => {
         const username = " abc";
@@ -60,32 +63,33 @@ describe("Authenticate ", () => {
         const password = "password123";
         const response = await axios.post(`${BASE_URL}/api/v1/signup`, {
             password,
-            type: "admin",
+            role: "admin",
         });
-        expect(response.statusCode).toBe(400);
+        expect(response.status).toBe(400);
     });
     test("Signin passes with correct credentials", async () => {
-        const username = "Lokidada" + Math.floor(Math.random() * 1000);
+        const username = "Lokidad" + Math.floor(Math.random() * 1000);
         const password = "password123";
         await axios.post(`${BASE_URL}/api/v1/signup`, {
-            username,
+            username1,
             password,
-            // type: "admin",
+            role: "admin",
         });
         const response = await axios.post(`${BASE_URL}/api/v1/signin`, {
-            username,
+            username1,
             password,
         });
-        expect(response.statusCode).toBe(200);
+        // console.log(response.data);
+        expect(response.status).toBe(200);
         expect(response.data.token).toBeDefined();
     });
     test("Signin fails with wrong credentials", async () => {
-        const username = "Lokidada" + Math.floor(Math.random() * 1000);
+        const username = "Lokidadi" + Math.floor(Math.random() * 1000);
         const password = "password123";
         await axios.post(`${BASE_URL}/api/v1/signup`, {
             username,
             password,
-            // type: "admin",
+            role: "admin",
         });
         try {
             await axios.post(`${BASE_URL}/api/v1/signin`, {

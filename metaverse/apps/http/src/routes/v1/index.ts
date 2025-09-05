@@ -4,7 +4,7 @@ import { userRouter } from "./user.js";
 import { spaceRouter } from "./space.js";
 import { SigninSchema, SignupSchema } from "../../types/index.js";
 import { z } from "zod";
-import {hash,compare} from "../../scrypt.js";
+import { hash, compare } from "../../scrypt.js";
 // import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 // import prisma from "@repo/db/client";
@@ -18,10 +18,13 @@ export const router = Router();
 
 router.post("/signup", async (req, res) => {
     const parsedData = SignupSchema.safeParse(req.body);
+    console.log(req.body);
+    // console.log(parsedData.data);
     if (!parsedData.success) {
         res.status(400).json({
             message: "validation failed",
             errors: parsedData.error.errors,
+            data: parsedData,
         });
         return;
     }
@@ -30,8 +33,7 @@ router.post("/signup", async (req, res) => {
         const user = await client.user.create({
             data: {
                 username: parsedData.data.username,
-                password: parsedData.data.password,
-                avatarId: parsedData.data.avatarId,
+                password: hashedPassword,
                 role: parsedData.data.role === "admin" ? "ADMIN" : "USER",
             },
         });
@@ -39,12 +41,10 @@ router.post("/signup", async (req, res) => {
             message: "User created successfully",
             userId: user.id,
         });
+        return;
     } catch (error) {
         res.status(400).json({ message: "User already exists" });
     }
-    res.json({
-        message: "Signup page",
-    });
 });
 router.post("/signin", async (req, res) => {
     const parsedData = SigninSchema.safeParse(req.body);
@@ -58,14 +58,14 @@ router.post("/signin", async (req, res) => {
     try {
         const user = await client.user.findUnique({
             where: {
-                username: parsedData.data.email,
+                username: parsedData.data.username,
             },
         });
         if (!user) {
             res.status(403).json({ message: "User not found" });
             return;
         }
-        const isPasswordValid = await compare(parsedData.data.password, user.password);
+        const isPasswordValid = await compare(parsedData.data.password,user.password);
         if (!isPasswordValid) {
             res.status(403).json({ message: "Invalid password" });
             return;
@@ -81,9 +81,6 @@ router.post("/signin", async (req, res) => {
         res.status(400).json({ message: "Internal server error" });
         return;
     }
-    res.json({
-        message: "Signin page",
-    });
 });
 
 router.get("/elements", (req, res) => {

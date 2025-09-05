@@ -1,14 +1,12 @@
 import z from "zod";
 
 export const SigninSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    type: z.enum(["admin", "user"]),
+    username: z.string(),
+    password: z.string(),
 });
 export const SignupSchema = z.object({
-    username: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    avatarId: z.string(),
+    username: z.string(),
+    password: z.string(),
     role: z.enum(["admin", "user"]),
 });
 
@@ -16,7 +14,7 @@ export const UpdateMetadataSchema = z.object({
     avatarId: z.string(),
 });
 export const CreateSpaceSchema = z.object({
-    name: z.string().min(1),
+    name: z.string(),
     dimension: z
         .string()
         .regex(
@@ -49,15 +47,17 @@ export const CreateAvatarSchema = z.object({
 });
 export const CreateMapSchema = z.object({
     thumbnail: z.string(),
-     dimension: z
+    dimension: z
         .string()
         .regex(
             /^\d{1,4}x\d{1,4}$/,
             "Dimension must be in the format WxH (e.g., 1920x1080)"
         ),
-    defaultElements: z.array(z.object({
-        elementId: z.string(),
-        x: z.number(),
-        y: z.number(),
-    })),
+    defaultElements: z.array(
+        z.object({
+            elementId: z.string(),
+            x: z.number(),
+            y: z.number(),
+        })
+    ),
 });
