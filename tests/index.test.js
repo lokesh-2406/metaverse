@@ -40,17 +40,17 @@ const BASE_URL = "http://localhost:3000";
 const WS_URL = "ws://localhost:3001";
 describe("Authenticate ", () => {
     test("User is able to sign up only once", async () => {
-        const username = "Lokidad" + Math.floor(Math.random() * 1000);
+        //const username = "Lokidad" + Math.floor(Math.random() * 1000);
         const password = "password123";
         const response = await axios.post(`${BASE_URL}/api/v1/signup`, {
-            username1,
+            username: username1,
             password,
             role: "admin",
         });
         console.log(response.data);
         expect(response.status).toBe(200);
         const response2 = await axios.post(`${BASE_URL}/api/v1/signup`, {
-            username1,
+            username: username1,
             password,
             role: "admin",
         });
@@ -68,15 +68,15 @@ describe("Authenticate ", () => {
         expect(response.status).toBe(400);
     });
     test("Signin passes with correct credentials", async () => {
-        const username = "Lokidad" + Math.floor(Math.random() * 1000);
+        //const username = "Lokidad" + Math.floor(Math.random() * 1000);
         const password = "password123";
         await axios.post(`${BASE_URL}/api/v1/signup`, {
-            username1,
+            username: username1,
             password,
             role: "admin",
         });
         const response = await axios.post(`${BASE_URL}/api/v1/signin`, {
-            username1,
+            username: username1,
             password,
         });
         // console.log(response.data);
