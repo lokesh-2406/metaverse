@@ -1,15 +1,15 @@
 # Metaverse Project(In progress)
 
-This repository contains the full-stack codebase for the Metaverse application. It is structured as a high-performance monorepo using **pnpm workspaces** and is managed by **Turborepo** to optimize build and development workflows.[1, 2]
+This repository contains the full-stack codebase for the Metaverse application. It is structured as a high-performance monorepo using **pnpm workspaces** and is managed by **Turborepo** to optimize build and development workflows.
 
-The backend is a Node.js server built with Express, using Prisma as the ORM to interact with a PostgreSQL database.[3, 4] The project also includes shared packages for UI components and configurations, along with a dedicated test suite for the API.
+The backend is a Node.js server built with Express, using Prisma as the ORM to interact with a PostgreSQL database. The project also includes shared packages for UI components and configurations, along with a dedicated test suite for the API.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following tools installed on your system:
 
   * **Node.js**: Version 18.x or higher.
-  * **pnpm**: This project uses pnpm for package management and workspaces.[5, 6] If you don't have it, install it globally: `npm install -g pnpm`.
+  * **pnpm**: This project uses pnpm for package management and workspaces. If you don't have it, install it globally: `npm install -g pnpm`.
   * **Docker**: The PostgreSQL database is run inside a Docker container for consistent and isolated development environments.
 
 ## Getting Started
@@ -27,7 +27,7 @@ cd metaverse/
 
 ### 2\. Install Dependencies
 
-Install all project dependencies using pnpm. Running this command from the root of the `metaverse` directory will install dependencies for all workspaces (`apps` and `packages`) and link them together.[7, 8]
+Install all project dependencies using pnpm. Running this command from the root of the `metaverse` directory will install dependencies for all workspaces (`apps` and `packages`) and link them together.
 
 ```bash
 pnpm install
@@ -76,7 +76,7 @@ DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/metaverse_db
 
 ### 5\. Run Database Migrations
 
-With the database running and the environment variables set, you can now create the necessary tables using Prisma Migrate. Run the following command from the root of the `metaverse` directory [3, 9]:
+With the database running and the environment variables set, you can now create the necessary tables using Prisma Migrate. Run the following command from the root of the `metaverse` directory :
 
 ```bash
 pnpm exec prisma migrate dev
@@ -92,7 +92,7 @@ This command will:
 
 ### Development Server
 
-To start the API server in development mode, run the following command from the root of the `metaverse` directory. Turborepo will automatically build the necessary packages and start the `http` application.[10, 2]
+To start the API server in development mode, run the following command from the root of the `metaverse` directory. Turborepo will automatically build the necessary packages and start the `http` application.
 
 ```bash
 pnpm run dev
@@ -108,7 +108,7 @@ To create an optimized production build of all applications and packages in the 
 pnpm run build
 ```
 
-This command uses `esbuild` to bundle the `http` server into a `dist/` directory within `apps/http`, preparing it for deployment.[11, 12, 13]
+This command uses `esbuild` to bundle the `http` server into a `dist/` directory within `apps/http`, preparing it for deployment.
 
 ## Running Tests
 
@@ -122,7 +122,7 @@ This command uses pnpm's `--filter` flag to specifically target and run the `tes
 
 ## Project Structure
 
-This repository is a monorepo managed with pnpm workspaces and Turborepo. This structure allows for efficient code sharing and centralized dependency management.[14, 6]
+This repository is a monorepo managed with pnpm workspaces and Turborepo. This structure allows for efficient code sharing and centralized dependency management.
 
 ```
 └── metaverse/
