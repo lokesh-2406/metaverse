@@ -1,4 +1,4 @@
-# Metaverse Project
+# Metaverse Project(In progress)
 
 This repository contains the full-stack codebase for the Metaverse application. It is structured as a high-performance monorepo using **pnpm workspaces** and is managed by **Turborepo** to optimize build and development workflows.[1, 2]
 
